@@ -1,0 +1,615 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="description" content="Hwine — Vinhos Finos. Seleção premium de tintos, brancos, espumantes e combos, com curadoria especializada." />
+    <link rel="icon" href="data:," />
+    <title>Hwine — Vinhos Finos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --bg: #070605;
+        --bg-2: #0d0b09;
+        --bg-3: #14110d;
+        --line: rgba(201, 162, 75, 0.22);
+        --line-soft: rgba(243, 234, 216, 0.08);
+        --gold: #c9a24b;
+        --gold-2: #e8c877;
+        --gold-deep: #8a6d2f;
+        --ink: #f3ead8;
+        --ink-soft: #b6ab97;
+        --ink-faint: #7e7462;
+        --serif: "Cormorant Garamond", "Playfair Display", Georgia, serif;
+        --sans: "Jost", "Segoe UI", system-ui, sans-serif;
+        --radius: 18px;
+      }
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font-family: var(--sans);
+        font-weight: 300;
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
+      }
+      img { display: block; max-width: 100%; }
+      a { color: inherit; text-decoration: none; }
+      ::selection { background: var(--gold); color: #0a0805; }
+
+      .wrap { width: min(1200px, 100% - 2.5rem); margin-inline: auto; }
+
+      /* ---------- Reveal animation ---------- */
+      .reveal { transition: opacity 0.9s ease, transform 0.9s cubic-bezier(0.22, 1, 0.36, 1); }
+      .reveal.armed { opacity: 0; transform: translateY(26px); }
+      .reveal.armed.in { opacity: 1; transform: none; }
+      .reveal.d1 { transition-delay: 0.08s; }
+      .reveal.d2 { transition-delay: 0.16s; }
+      .reveal.d3 { transition-delay: 0.24s; }
+      @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto; }
+        .reveal, .reveal.armed { opacity: 1; transform: none; transition: none; }
+        .hero-video { display: none; }
+      }
+      @media print {
+        .reveal, .reveal.armed { opacity: 1 !important; transform: none !important; }
+        header, .scroll-hint, .hero-video { display: none !important; }
+        .hero { min-height: auto; }
+      }
+
+      /* ---------- Header ---------- */
+      header {
+        position: fixed; inset: 0 0 auto 0; z-index: 50;
+        transition: background 0.4s ease, border-color 0.4s ease, backdrop-filter 0.4s ease;
+        border-bottom: 1px solid transparent;
+      }
+      header.scrolled {
+        background: rgba(7, 6, 5, 0.82);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        border-bottom-color: var(--line-soft);
+      }
+      .header-in {
+        display: flex; align-items: center; justify-content: space-between;
+        gap: 1rem; padding: 0.8rem 0;
+      }
+      .brand { display: flex; align-items: center; gap: 0.7rem; }
+      .brand img { width: 46px; height: 46px; border-radius: 50%; object-fit: cover; border: 1px solid var(--line); }
+      .brand-name { font-family: var(--serif); font-size: 1.55rem; font-weight: 600; letter-spacing: 0.04em; line-height: 1; }
+      .brand-name em { font-style: italic; color: var(--gold-2); }
+      .brand-sub { display: block; font-family: var(--sans); font-size: 0.58rem; font-weight: 500; letter-spacing: 0.42em; color: var(--ink-soft); margin-top: 0.28rem; }
+      nav.main-nav { display: none; }
+      nav.main-nav a {
+        font-size: 0.78rem; font-weight: 400; letter-spacing: 0.22em; text-transform: uppercase;
+        color: var(--ink-soft); padding: 0.4rem 0.2rem; position: relative; transition: color 0.3s;
+      }
+      nav.main-nav a::after {
+        content: ""; position: absolute; left: 0; bottom: 0; height: 1px; width: 100%;
+        background: var(--gold); transform: scaleX(0); transform-origin: right; transition: transform 0.35s ease;
+      }
+      nav.main-nav a:hover { color: var(--ink); }
+      nav.main-nav a:hover::after { transform: scaleX(1); transform-origin: left; }
+      .btn {
+        display: inline-flex; align-items: center; gap: 0.55rem;
+        font-family: var(--sans); font-size: 0.78rem; font-weight: 500;
+        letter-spacing: 0.2em; text-transform: uppercase;
+        padding: 0.85rem 1.7rem; border-radius: 999px;
+        transition: transform 0.3s ease, background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        white-space: nowrap;
+      }
+      .btn-gold { background: linear-gradient(135deg, var(--gold-2), var(--gold) 55%, var(--gold-deep)); color: #171106; border: 1px solid transparent; }
+      .btn-gold:hover { transform: translateY(-2px); }
+      .btn-ghost { border: 1px solid var(--line); color: var(--ink); background: rgba(7, 6, 5, 0.25); }
+      .btn-ghost:hover { border-color: var(--gold); color: var(--gold-2); transform: translateY(-2px); }
+      .header-cta { display: none; }
+      .menu-btn {
+        display: inline-flex; align-items: center; justify-content: center;
+        width: 44px; height: 44px; border-radius: 50%;
+        border: 1px solid var(--line-soft); background: transparent; color: var(--ink); cursor: pointer;
+      }
+      .mobile-nav {
+        display: none; flex-direction: column; gap: 0.2rem;
+        padding: 0.6rem 0 1.2rem;
+      }
+      .mobile-nav.open { display: flex; }
+      .mobile-nav a {
+        font-size: 0.85rem; letter-spacing: 0.24em; text-transform: uppercase;
+        color: var(--ink-soft); padding: 0.65rem 0.2rem; border-bottom: 1px solid var(--line-soft);
+      }
+      .mobile-nav a:last-child { border-bottom: none; }
+      @media (min-width: 900px) {
+        nav.main-nav { display: flex; gap: 2.2rem; }
+        .header-cta { display: inline-flex; }
+        .menu-btn { display: none; }
+        .mobile-nav { display: none !important; }
+      }
+
+      /* ---------- Hero ---------- */
+      .hero {
+        position: relative; min-height: 100svh;
+        display: flex; align-items: center; justify-content: center;
+        text-align: center; overflow: hidden;
+        padding: 7.5rem 0 6.5rem;
+      }
+      .hero-media { position: absolute; inset: 0; }
+      .hero-video { width: 100%; height: 100%; object-fit: cover; }
+      .hero-poster { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+      .hero-shade {
+        position: absolute; inset: 0;
+        background:
+          radial-gradient(ellipse 90% 55% at 50% 42%, rgba(7, 6, 5, 0.18) 0%, rgba(7, 6, 5, 0.55) 78%),
+          linear-gradient(to bottom, rgba(7, 6, 5, 0.72) 0%, rgba(7, 6, 5, 0.28) 30%, rgba(7, 6, 5, 0.34) 62%, var(--bg) 100%);
+      }
+      .hero-content { position: relative; z-index: 2; width: min(860px, 100% - 2.5rem); }
+      .hero-logo {
+        width: clamp(150px, 24vw, 215px); height: auto; aspect-ratio: 1; object-fit: cover;
+        margin: 0 auto 1.4rem; border-radius: 50%;
+        border: 1px solid rgba(201, 162, 75, 0.45);
+        box-shadow: 0 18px 50px rgba(0, 0, 0, 0.6), 0 0 0 8px rgba(7, 6, 5, 0.25);
+      }
+      .kicker {
+        font-size: 0.72rem; font-weight: 500; letter-spacing: 0.5em; text-transform: uppercase;
+        color: var(--gold-2); margin: 0 0 1.1rem; text-indent: 0.5em;
+      }
+      .hero h1 {
+        font-family: var(--serif); font-weight: 500;
+        font-size: clamp(2.6rem, 7.2vw, 4.9rem);
+        line-height: 1.04; margin: 0 0 1.2rem; letter-spacing: 0.01em;
+        text-shadow: 0 4px 30px rgba(0, 0, 0, 0.65);
+      }
+      .hero h1 em { font-style: italic; color: var(--gold-2); }
+      .hero p.lead {
+        max-width: 34rem; margin: 0 auto 2.2rem;
+        font-size: clamp(1rem, 2.4vw, 1.15rem); color: #e9dfc9;
+        text-shadow: 0 2px 14px rgba(0, 0, 0, 0.7);
+      }
+      .hero-actions { display: flex; flex-wrap: wrap; gap: 0.9rem; justify-content: center; }
+      .hero-rule { display: flex; align-items: center; gap: 1rem; justify-content: center; margin: 0 auto 1.6rem; width: min(320px, 70%); }
+      .hero-rule::before, .hero-rule::after { content: ""; height: 1px; flex: 1; background: linear-gradient(90deg, transparent, var(--gold)); }
+      .hero-rule::after { background: linear-gradient(90deg, var(--gold), transparent); }
+      .hero-rule span { width: 7px; height: 7px; background: var(--gold); transform: rotate(45deg); flex: none; }
+      .scroll-hint {
+        position: absolute; left: 50%; bottom: 1.6rem; transform: translateX(-50%); z-index: 2;
+        display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+        font-size: 0.62rem; letter-spacing: 0.4em; text-transform: uppercase; color: var(--ink-soft); text-indent: 0.4em;
+      }
+      .scroll-hint i { width: 1px; height: 42px; background: linear-gradient(var(--gold), transparent); display: block; animation: drip 2.4s ease-in-out infinite; }
+      @keyframes drip { 0%, 100% { transform: scaleY(0.55); opacity: 0.5; transform-origin: top; } 50% { transform: scaleY(1); opacity: 1; transform-origin: top; } }
+      @media (prefers-reduced-motion: reduce) { .scroll-hint i { animation: none; } }
+
+      /* ---------- Diferenciais ---------- */
+      .perks { border-block: 1px solid var(--line-soft); background: var(--bg-2); }
+      .perks-grid { display: grid; grid-template-columns: 1fr; }
+      .perk {
+        display: flex; gap: 1.05rem; align-items: flex-start;
+        padding: 1.7rem 0.4rem;
+      }
+      .perk + .perk { border-top: 1px solid var(--line-soft); }
+      .perk svg { width: 30px; height: 30px; flex: none; stroke: var(--gold); fill: none; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; margin-top: 0.15rem; }
+      .perk h3 { margin: 0 0 0.25rem; font-family: var(--sans); font-size: 0.82rem; font-weight: 500; letter-spacing: 0.26em; text-transform: uppercase; color: var(--ink); }
+      .perk p { margin: 0; font-size: 0.92rem; color: var(--ink-soft); }
+      @media (min-width: 760px) {
+        .perks-grid { grid-template-columns: repeat(2, 1fr); }
+        .perk { padding: 1.9rem 1.6rem; }
+        .perk + .perk { border-top: none; }
+        .perk:nth-child(even) { border-left: 1px solid var(--line-soft); }
+        .perk:nth-child(n + 3) { border-top: 1px solid var(--line-soft); }
+      }
+      @media (min-width: 1080px) {
+        .perks-grid { grid-template-columns: repeat(4, 1fr); }
+        .perk:nth-child(n + 3) { border-top: none; }
+        .perk + .perk { border-left: 1px solid var(--line-soft); }
+        .perk { flex-direction: column; gap: 0.8rem; padding: 2.1rem 1.7rem; }
+      }
+
+      /* ---------- Sections ---------- */
+      section.block { padding: 5.2rem 0; }
+      .sec-head { text-align: center; max-width: 620px; margin: 0 auto 3rem; }
+      .sec-head .kicker { margin-bottom: 0.7rem; }
+      .sec-head h2 { font-family: var(--serif); font-weight: 500; font-size: clamp(2.1rem, 5vw, 3.1rem); line-height: 1.08; margin: 0 0 0.8rem; }
+      .sec-head h2 em { font-style: italic; color: var(--gold-2); }
+      .sec-head p { margin: 0; color: var(--ink-soft); font-size: 1rem; }
+      .sec-rule { display: flex; align-items: center; gap: 0.9rem; justify-content: center; margin-top: 1.3rem; }
+      .sec-rule::before, .sec-rule::after { content: ""; height: 1px; width: 64px; background: linear-gradient(90deg, transparent, var(--gold)); }
+      .sec-rule::after { background: linear-gradient(90deg, var(--gold), transparent); }
+      .sec-rule span { width: 6px; height: 6px; background: var(--gold); transform: rotate(45deg); }
+
+      /* ---------- Categorias ---------- */
+      .cats { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+      .cat {
+        position: relative; border-radius: var(--radius); overflow: hidden;
+        aspect-ratio: 3 / 4; display: flex; align-items: flex-end;
+        border: 1px solid var(--line-soft); isolation: isolate;
+      }
+      .cat img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1); }
+      .cat::after {
+        content: ""; position: absolute; inset: 0; z-index: -1;
+        background: linear-gradient(to top, rgba(5, 4, 3, 0.92) 0%, rgba(5, 4, 3, 0.35) 45%, rgba(5, 4, 3, 0.05) 75%);
+      }
+      .cat:hover img { transform: scale(1.06); }
+      .cat-body { padding: 1.2rem; width: 100%; }
+      .cat-body h3 { font-family: var(--serif); font-size: clamp(1.35rem, 3.4vw, 1.9rem); font-weight: 600; margin: 0 0 0.2rem; letter-spacing: 0.02em; }
+      .cat-body p { margin: 0 0 0.7rem; font-size: 0.86rem; color: #ddd2ba; }
+      .cat-link { font-size: 0.68rem; font-weight: 500; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold-2); display: inline-flex; align-items: center; gap: 0.45rem; }
+      .cat-link svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.8; transition: transform 0.3s ease; }
+      .cat:hover .cat-link svg { transform: translateX(4px); }
+      @media (min-width: 900px) { .cats { grid-template-columns: repeat(4, 1fr); gap: 1.1rem; } .cat { aspect-ratio: 3 / 4.1; } }
+
+      /* ---------- Produtos ---------- */
+      .products-sec { background: var(--bg-2); border-block: 1px solid var(--line-soft); }
+      .prods { display: grid; grid-template-columns: 1fr; gap: 1.1rem; }
+      @media (min-width: 620px) { .prods { grid-template-columns: 1fr 1fr; } }
+      @media (min-width: 1020px) { .prods { grid-template-columns: repeat(4, 1fr); } }
+      .prod {
+        background: var(--bg-3); border: 1px solid var(--line-soft); border-radius: var(--radius);
+        overflow: hidden; display: flex; flex-direction: column;
+        transition: border-color 0.35s ease, transform 0.35s ease;
+      }
+      .prod:hover { border-color: var(--line); transform: translateY(-4px); }
+      .prod-media { aspect-ratio: 4 / 4.6; overflow: hidden; }
+      .prod-media img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1); }
+      .prod:hover .prod-media img { transform: scale(1.05); }
+      .prod-body { padding: 1.35rem 1.35rem 1.5rem; display: flex; flex-direction: column; gap: 0.35rem; flex: 1; }
+      .prod-tag { font-size: 0.64rem; font-weight: 500; letter-spacing: 0.34em; text-transform: uppercase; color: var(--gold); }
+      .prod-body h3 { font-family: var(--serif); font-size: 1.5rem; font-weight: 600; margin: 0; line-height: 1.15; }
+      .prod-body p { margin: 0 0 1.1rem; font-size: 0.9rem; color: var(--ink-soft); flex: 1; }
+      .btn-order {
+        display: inline-flex; align-items: center; justify-content: center; gap: 0.55rem;
+        border: 1px solid var(--line); border-radius: 999px; padding: 0.72rem 1rem;
+        font-size: 0.72rem; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink);
+        transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+      }
+      .btn-order svg { width: 15px; height: 15px; fill: currentColor; }
+      .btn-order:hover { background: linear-gradient(135deg, var(--gold-2), var(--gold) 60%, var(--gold-deep)); color: #171106; border-color: transparent; }
+
+      /* ---------- Sobre / Legado ---------- */
+      .about { position: relative; overflow: hidden; }
+      .about-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.4; }
+      .about-shade { position: absolute; inset: 0; background: linear-gradient(100deg, rgba(7, 6, 5, 0.94) 30%, rgba(7, 6, 5, 0.55) 70%, rgba(7, 6, 5, 0.35)); }
+      .about-in { position: relative; padding: 5.5rem 0; max-width: 600px; }
+      .about-in .kicker { text-indent: 0; }
+      .about-in h2 { font-family: var(--serif); font-weight: 500; font-size: clamp(2.1rem, 5vw, 3.2rem); line-height: 1.08; margin: 0 0 1.2rem; }
+      .about-in h2 em { font-style: italic; color: var(--gold-2); }
+      .about-in p { color: #ddd2ba; font-size: 1.02rem; margin: 0 0 1rem; }
+      .about-points { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1.6rem; }
+      .about-points span {
+        font-size: 0.7rem; font-weight: 400; letter-spacing: 0.26em; text-transform: uppercase;
+        border: 1px solid var(--line); border-radius: 999px; padding: 0.5rem 1rem; color: var(--gold-2);
+        background: rgba(7, 6, 5, 0.45);
+      }
+
+      /* ---------- CTA final ---------- */
+      .cta-final { text-align: center; padding: 6rem 0; position: relative; }
+      .cta-final::before {
+        content: ""; position: absolute; inset: 0;
+        background: radial-gradient(ellipse 60% 70% at 50% 50%, rgba(201, 162, 75, 0.09), transparent 70%);
+        pointer-events: none;
+      }
+      .cta-final img { width: 120px; aspect-ratio: 1; object-fit: cover; border-radius: 50%; border: 1px solid var(--line); margin: 0 auto 1.6rem; }
+      .cta-final h2 { font-family: var(--serif); font-weight: 500; font-size: clamp(2.2rem, 5.6vw, 3.6rem); line-height: 1.08; margin: 0 0 1rem; }
+      .cta-final h2 em { font-style: italic; color: var(--gold-2); }
+      .cta-final p { color: var(--ink-soft); max-width: 30rem; margin: 0 auto 2.2rem; }
+
+      /* ---------- Rodapé ---------- */
+      footer { border-top: 1px solid var(--line-soft); background: var(--bg-2); padding: 3.2rem 0 2.2rem; }
+      .foot-grid { display: flex; flex-direction: column; gap: 2rem; align-items: flex-start; }
+      .foot-brand img { width: 74px; height: 74px; border-radius: 50%; object-fit: cover; border: 1px solid var(--line); margin-bottom: 0.9rem; }
+      .foot-brand p { margin: 0; color: var(--ink-soft); font-size: 0.92rem; max-width: 19rem; }
+      .foot-col h4 { margin: 0 0 0.9rem; font-size: 0.72rem; font-weight: 500; letter-spacing: 0.32em; text-transform: uppercase; color: var(--gold); font-family: var(--sans); }
+      .foot-col a { display: block; padding: 0.28rem 0; color: var(--ink-soft); font-size: 0.95rem; transition: color 0.3s; }
+      .foot-col a:hover { color: var(--gold-2); }
+      .foot-bottom {
+        margin-top: 2.6rem; padding-top: 1.4rem; border-top: 1px solid var(--line-soft);
+        display: flex; flex-direction: column; gap: 0.4rem;
+        font-size: 0.8rem; color: var(--ink-faint);
+      }
+      @media (min-width: 820px) {
+        .foot-grid { flex-direction: row; justify-content: space-between; }
+        .foot-bottom { flex-direction: row; justify-content: space-between; }
+      }
+    </style>
+  </head>
+  <body>
+    <header id="header">
+      <div class="wrap header-in">
+        <a class="brand" href="#inicio" aria-label="Hwine — início">
+          <img src="assets/a0.jpg" alt="Logo Hwine" />
+          <span>
+            <span class="brand-name">H<em>Wine</em></span>
+            <span class="brand-sub">VINHOS FINOS</span>
+          </span>
+        </a>
+        <nav class="main-nav" aria-label="Navegação principal">
+          <a href="#inicio">Início</a>
+          <a href="#categorias">Categorias</a>
+          <a href="#destaques">Destaques</a>
+          <a href="#sobre">Sobre</a>
+        </nav>
+        <a class="btn btn-gold header-cta" href="#">Pedir no WhatsApp</a>
+        <button class="menu-btn" id="menuBtn" aria-label="Abrir menu" aria-expanded="false">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </button>
+      </div>
+      <div class="wrap">
+        <nav class="mobile-nav" id="mobileNav" aria-label="Menu móvel">
+          <a href="#inicio">Início</a>
+          <a href="#categorias">Categorias</a>
+          <a href="#destaques">Destaques</a>
+          <a href="#sobre">Sobre</a>
+          <a href="#">Pedir no WhatsApp</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <!-- HERO -->
+      <section class="hero" id="inicio">
+        <div class="hero-media" aria-hidden="true">
+          <img class="hero-poster" src="assets/a1.jpg" alt="" />
+          <video class="hero-video" autoplay muted loop playsinline preload="metadata" poster="assets/a2.jpg">
+            <source src="assets/a3.mp4" type="video/mp4" />
+          </video>
+          <div class="hero-shade"></div>
+        </div>
+        <div class="hero-content">
+          <img class="hero-logo reveal in" src="assets/a4.jpg" alt="Hwine — Vinhos Finos" />
+          <p class="kicker reveal in d1">Vinhos Finos · Seleção Premium</p>
+          <h1 class="reveal in d1">O vinho certo para <em>momentos inesquecíveis</em></h1>
+          <div class="hero-rule reveal in d2"><span></span></div>
+          <p class="lead reveal in d2">Rótulos selecionados com curadoria especializada — tintos, brancos, espumantes e combos para brindar, presentear e colecionar.</p>
+          <div class="hero-actions reveal in d3">
+            <a class="btn btn-gold" href="#destaques">Ver destaques</a>
+            <a class="btn btn-ghost" href="#categorias">Nossas categorias</a>
+          </div>
+        </div>
+        <div class="scroll-hint" aria-hidden="true">Explore<i></i></div>
+      </section>
+
+      <!-- DIFERENCIAIS -->
+      <div class="perks">
+        <div class="wrap perks-grid">
+          <div class="perk reveal">
+            <svg viewBox="0 0 24 24"><path d="M7 3h10v5a5 5 0 0 1-10 0V3Z"/><path d="M12 13v6M8.5 21h7"/></svg>
+            <div>
+              <h3>Seleção Premium</h3>
+              <p>Rótulos escolhidos a dedo, das melhores procedências.</p>
+            </div>
+          </div>
+          <div class="perk reveal d1">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="9" r="5.5"/><path d="m9 13.5-1.8 7L12 17.8l4.8 2.7-1.8-7"/></svg>
+            <div>
+              <h3>Curadoria</h3>
+              <p>Cada vinho passa por uma seleção criteriosa de qualidade.</p>
+            </div>
+          </div>
+          <div class="perk reveal d2">
+            <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 0-9 9"/><path d="M21 12a9 9 0 0 1-9 9"/><path d="M8.5 11h.01M12 11h.01M15.5 11h.01"/></svg>
+            <div>
+              <h3>Atendimento Personalizado</h3>
+              <p>Ajuda para escolher o rótulo ideal para cada ocasião.</p>
+            </div>
+          </div>
+          <div class="perk reveal d3">
+            <svg viewBox="0 0 24 24"><path d="M12 3l7 2.8v5.4c0 4.6-3 7.8-7 9.3-4-1.5-7-4.7-7-9.3V5.8L12 3Z"/><path d="m9 11.8 2.2 2.2L15.5 9.7"/></svg>
+            <div>
+              <h3>Compra Segura</h3>
+              <p>Pedido confirmado com você antes de qualquer envio.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CATEGORIAS -->
+      <section class="block" id="categorias">
+        <div class="wrap">
+          <div class="sec-head reveal">
+            <p class="kicker">Nossas Categorias</p>
+            <h2>Para cada ocasião, <em>um rótulo</em></h2>
+            <p>Da taça do dia a dia à garrafa de celebração: explore as categorias da Hwine.</p>
+            <div class="sec-rule"><span></span></div>
+          </div>
+          <div class="cats">
+            <a class="cat" href="#destaques">
+              <img src="assets/a5.jpg" alt="Vinho tinto sendo servido em taça de cristal" loading="lazy" />
+              <div class="cat-body">
+                <h3>Vinho Tinto</h3>
+                <p>Ideal para compartilhar com amigos</p>
+                <span class="cat-link">Explorar <svg viewBox="0 0 24 24"><path d="M4 12h15m-6-7 7 7-7 7"/></svg></span>
+              </div>
+            </a>
+            <a class="cat" href="#destaques">
+              <img src="assets/a6.jpg" alt="Vinho branco sendo servido em taça" loading="lazy" />
+              <div class="cat-body">
+                <h3>Vinho Branco</h3>
+                <p>Ideal para acompanhar massas e pratos leves</p>
+                <span class="cat-link">Explorar <svg viewBox="0 0 24 24"><path d="M4 12h15m-6-7 7 7-7 7"/></svg></span>
+              </div>
+            </a>
+            <a class="cat" href="#destaques">
+              <img src="assets/a7.jpg" alt="Garrafa de espumante e taça com borbulhas douradas" loading="lazy" />
+              <div class="cat-body">
+                <h3>Espumantes</h3>
+                <p>Para brindar os momentos especiais</p>
+                <span class="cat-link">Explorar <svg viewBox="0 0 24 24"><path d="M4 12h15m-6-7 7 7-7 7"/></svg></span>
+              </div>
+            </a>
+            <a class="cat" href="#destaques">
+              <img src="assets/a8.jpg" alt="Combo de vinhos com taças em ambiente à luz de velas" loading="lazy" />
+              <div class="cat-body">
+                <h3>Combos</h3>
+                <p>Seleções prontas para presentear e celebrar</p>
+                <span class="cat-link">Explorar <svg viewBox="0 0 24 24"><path d="M4 12h15m-6-7 7 7-7 7"/></svg></span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- DESTAQUES -->
+      <section class="block products-sec" id="destaques">
+        <div class="wrap">
+          <div class="sec-head reveal">
+            <p class="kicker">Destaques</p>
+            <h2>Rótulos em <em>destaque</em></h2>
+            <p>Uma amostra da nossa seleção. Fale com a gente para conhecer o catálogo completo e receber uma recomendação.</p>
+            <div class="sec-rule"><span></span></div>
+          </div>
+          <div class="prods">
+            <article class="prod">
+              <div class="prod-media"><img src="assets/a9.jpg" alt="Garrafa de vinho tinto com rótulo Quinta do Vale Malbec Reserva" loading="lazy" /></div>
+              <div class="prod-body">
+                <span class="prod-tag">Tinto · Reserva</span>
+                <h3>Quinta do Vale Malbec Reserva</h3>
+                <p>Encorpado e aveludado, ideal para carnes e queijos curados.</p>
+                <a class="btn-order" href="#"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.2 14.2c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.4-.7-2.9-1.2-4.7-4.1-4.9-4.3-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .6l-.4.6-.4.5c-.1.1-.3.3-.1.6.2.3.8 1.4 1.8 2.2 1.2 1.1 2.3 1.5 2.6 1.6.3.1.5.1.7-.1l1-1.2c.2-.3.4-.2.7-.1l2.1 1c.3.2.5.3.6.4 0 .1 0 .7-.2 1.2Z"/></svg>Pedir no WhatsApp</a>
+              </div>
+            </article>
+            <article class="prod">
+              <div class="prod-media"><img src="assets/a10.jpg" alt="Garrafa de vinho tinto com rótulo Terra Nostra Cabernet Sauvignon" loading="lazy" /></div>
+              <div class="prod-body">
+                <span class="prod-tag">Tinto · Clássico</span>
+                <h3>Terra Nostra Cabernet Sauvignon</h3>
+                <p>Estruturado e elegante, para qualquer momento à mesa.</p>
+                <a class="btn-order" href="#"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.2 14.2c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.4-.7-2.9-1.2-4.7-4.1-4.9-4.3-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .6l-.4.6-.4.5c-.1.1-.3.3-.1.6.2.3.8 1.4 1.8 2.2 1.2 1.1 2.3 1.5 2.6 1.6.3.1.5.1.7-.1l1-1.2c.2-.3.4-.2.7-.1l2.1 1c.3.2.5.3.6.4 0 .1 0 .7-.2 1.2Z"/></svg>Pedir no WhatsApp</a>
+              </div>
+            </article>
+            <article class="prod">
+              <div class="prod-media"><img src="assets/a11.jpg" alt="Garrafa de vinho branco com rótulo Alto das Vinhas Chardonnay Premium" loading="lazy" style="object-position: 50% 68%" /></div>
+              <div class="prod-body">
+                <span class="prod-tag">Branco · Premium</span>
+                <h3>Alto das Vinhas Chardonnay</h3>
+                <p>Fresco e aromático, perfeito para massas e frutos do mar.</p>
+                <a class="btn-order" href="#"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.2 14.2c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.4-.7-2.9-1.2-4.7-4.1-4.9-4.3-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .6l-.4.6-.4.5c-.1.1-.3.3-.1.6.2.3.8 1.4 1.8 2.2 1.2 1.1 2.3 1.5 2.6 1.6.3.1.5.1.7-.1l1-1.2c.2-.3.4-.2.7-.1l2.1 1c.3.2.5.3.6.4 0 .1 0 .7-.2 1.2Z"/></svg>Pedir no WhatsApp</a>
+              </div>
+            </article>
+            <article class="prod">
+              <div class="prod-media"><img src="assets/a12.jpg" alt="Garrafa de espumante com rótulo Casa Dorada Espumante Brut" loading="lazy" style="object-position: 50% 72%" /></div>
+              <div class="prod-body">
+                <span class="prod-tag">Espumante · Brut</span>
+                <h3>Casa Dorada Espumante Brut</h3>
+                <p>Borbulhas finas e persistentes, feito para celebrar.</p>
+                <a class="btn-order" href="#"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.2 14.2c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.4-.7-2.9-1.2-4.7-4.1-4.9-4.3-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .6l-.4.6-.4.5c-.1.1-.3.3-.1.6.2.3.8 1.4 1.8 2.2 1.2 1.1 2.3 1.5 2.6 1.6.3.1.5.1.7-.1l1-1.2c.2-.3.4-.2.7-.1l2.1 1c.3.2.5.3.6.4 0 .1 0 .7-.2 1.2Z"/></svg>Pedir no WhatsApp</a>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- SOBRE -->
+      <section class="about" id="sobre">
+        <img class="about-bg" src="assets/a13.jpg" alt="" aria-hidden="true" loading="lazy" />
+        <div class="about-shade" aria-hidden="true"></div>
+        <div class="wrap">
+          <div class="about-in reveal">
+            <p class="kicker">O Legado Hwine</p>
+            <h2>Tradição e curadoria em <em>cada garrafa</em></h2>
+            <p>A Hwine nasceu da paixão pelo vinho e do cuidado em selecionar rótulos que realmente valem a taça. Trabalhamos com vinhos finos de procedência garantida, escolhidos um a um para compor uma adega enxuta, elegante e confiável.</p>
+            <p>Do tinto de todos os dias ao espumante da grande celebração, nossa curadoria existe para que você só precise se preocupar com uma coisa: brindar.</p>
+            <div class="about-points">
+              <span>Procedência garantida</span>
+              <span>Curadoria especializada</span>
+              <span>Rótulos selecionados</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CTA FINAL -->
+      <section class="cta-final">
+        <div class="wrap">
+          <img src="assets/a14.jpg" alt="Hwine — Vinhos Finos" loading="lazy" />
+          <h2>Pronto para <em>brindar?</em></h2>
+          <p>Fale com a Hwine e receba uma recomendação de rótulo para a sua próxima ocasião.</p>
+          <a class="btn btn-gold" href="#">Pedir no WhatsApp</a>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="wrap">
+        <div class="foot-grid">
+          <div class="foot-brand">
+            <img src="assets/a15.jpg" alt="Logo Hwine" loading="lazy" />
+            <p>Vinhos finos selecionados com curadoria — para brindar, presentear e colecionar.</p>
+          </div>
+          <div class="foot-col">
+            <h4>Navegação</h4>
+            <a href="#inicio">Início</a>
+            <a href="#categorias">Categorias</a>
+            <a href="#destaques">Destaques</a>
+            <a href="#sobre">Sobre</a>
+          </div>
+          <div class="foot-col">
+            <h4>Categorias</h4>
+            <a href="#categorias">Vinho Tinto</a>
+            <a href="#categorias">Vinho Branco</a>
+            <a href="#categorias">Espumantes</a>
+            <a href="#categorias">Combos</a>
+          </div>
+          <div class="foot-col">
+            <h4>Atendimento</h4>
+            <a href="#">WhatsApp</a>
+            <a href="#">Catálogo completo</a>
+          </div>
+        </div>
+        <div class="foot-bottom">
+          <span>© 2026 Hwine — Vinhos Finos. Todos os direitos reservados.</span>
+          <span>Beba com moderação. Proibida a venda para menores de 18 anos.</span>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      (function () {
+        var header = document.getElementById('header');
+        var onScroll = function () {
+          header.classList.toggle('scrolled', window.scrollY > 24);
+        };
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+
+        var menuBtn = document.getElementById('menuBtn');
+        var mobileNav = document.getElementById('mobileNav');
+        menuBtn.addEventListener('click', function () {
+          var open = mobileNav.classList.toggle('open');
+          menuBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+          header.classList.toggle('scrolled', open || window.scrollY > 24);
+        });
+        mobileNav.addEventListener('click', function (e) {
+          if (e.target.tagName === 'A') {
+            mobileNav.classList.remove('open');
+            menuBtn.setAttribute('aria-expanded', 'false');
+          }
+        });
+
+        var revealEls = document.querySelectorAll('.reveal:not(.in)');
+        if ('IntersectionObserver' in window) {
+          var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('in');
+                io.unobserve(entry.target);
+              }
+            });
+          }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+          revealEls.forEach(function (el) {
+            // Only arm (hide) elements that start below the fold, so content
+            // is never invisible if the page is captured or read without scrolling.
+            if (el.getBoundingClientRect().top > window.innerHeight * 0.92) {
+              el.classList.add('armed');
+              io.observe(el);
+            } else {
+              el.classList.add('in');
+            }
+          });
+        }
+      })();
+    </script>
+  </body>
+</html>
